@@ -4,10 +4,11 @@ import { ModelType } from "@typegoose/typegoose/lib/types";
 import { hash, genSalt, compare } from "bcryptjs";
 import { UserModel } from "src/user/user.model";
 import { AuthDto } from "./dto/auth.dto";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(UserModel) private readonly UserModel: ModelType<UserModel>) {
+  constructor(@InjectModel(UserModel) private readonly UserModel: ModelType<UserModel>, private readonly jwtService: JwtService) {
   }
 
   async login(dto: AuthDto) {
@@ -34,5 +35,10 @@ export class AuthService {
     const isValidPassword = await compare(dto.password, user.password);
     if (!isValidPassword) throw new UnauthorizedException("Invalid Password");
     return user;
+  }
+
+  async issueTokenPair(userId: string) {
+    const data = { _id: userId };
+    const refreshToken = await this;
   }
 }
