@@ -18,7 +18,7 @@ export class AuthService {
     const salt = await genSalt(10);
     const newUser = new this.UserModel({
       email: dto.email,
-      Password: hash(dto.password, salt)
+      Password: await hash(dto.password, salt)
     });
     return newUser.save();
   }
