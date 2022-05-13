@@ -60,7 +60,7 @@ export class AuthService {
     return { refreshToken, accessToken };
   }
 
-  async returnUserFields(user: UserModel) {
+  returnUserFields(user: UserModel) {
     return {
       _id: user._id,
       email: user.email,
