@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectModel } from "nestjs-typegoose";
 import { ModelType } from "@typegoose/typegoose/lib/types";
-import {hash, getSalt, compare} from "bcryptjs";
+import {hash, genSalt, compare} from "bcryptjs";
 import { UserModel } from "src/user/user.model";
 import { AuthDto } from "./dto/auth.dto";
 
@@ -14,7 +14,12 @@ export class AuthService {
     const oldUser = await this.UserModel.findOne({ email: dto.email });
     if(oldUser)
       throw new BadRequestException('User with this email is already in the system');
-    const newUser = new this.UserModel(dto);
+
+    const salt = await genSalt(10);
+    const newUser = new this.UserModel({
+      email: dto.email,
+      Password: hash(dto.password, salt)
+    });
     return newUser.save();
   }
 }
