@@ -7,6 +7,6 @@ import { InjectModel } from "nestjs-typegoose";
 export class UserService {
   constructor(@InjectModel(UserModel) private readonly userModel: ModelType<UserModel>){}
   async byId(){
-
+    return {email: 'testByID@test.com'}
   }
 }
