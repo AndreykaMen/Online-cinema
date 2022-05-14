@@ -28,7 +28,7 @@ export class UserController {
   @Put(":id")
   @HttpCode(200)
   @Auth('admin')
-  async updateUser(@Param("_id", IdValidationPipe) _id: string, @Body() dto: UpdateUserDto) {
-    return this.userService.updateProfile(_id, dto);
+  async updateUser(@Param("id", IdValidationPipe) id: string, @Body() dto: UpdateUserDto) {
+    return this.userService.updateProfile(id, dto);
   }
 }
