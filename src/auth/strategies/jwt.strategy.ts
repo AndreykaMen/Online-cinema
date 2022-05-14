@@ -1,10 +1,10 @@
+import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
+import { ModelType } from "@typegoose/typegoose/lib/types";
+import { InjectModel } from "nestjs-typegoose";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { ConfigService } from "@nestjs/config";
-import { UserModel } from "../../user/user.model";
-import { ModelType } from "@typegoose/typegoose/lib/types";
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "nestjs-typegoose";
+import { UserModel } from "src/user/user.model";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(_id: Pick<UserModel, "_id">) {
+  async validate({ _id }: Pick<UserModel, "_id">) {
     return this.UserModel.findById(_id).exec();
   }
 }
