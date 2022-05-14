@@ -21,4 +21,8 @@ export class UserService {
     //   createdAt: user.createdAt
     // }
   }
+
+  async updateProfile(_id: string), dto: UpdateUserDto){
+
+  }
 }
