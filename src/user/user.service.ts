@@ -39,4 +39,8 @@ export class UserService {
     await user.save();
     return;
   }
+
+  async getCount() {
+    return this.UserModel.find().count().exec();
+  }
 }
