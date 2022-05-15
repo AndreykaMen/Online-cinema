@@ -1,5 +1,5 @@
-<h3 align="center"> Backend Autorization User. Admin rights.</h3>
 <br>
+<h2 align="center"> Backend Authorization User. Admin rights.</h2>
 <br>
 <hr>
 
