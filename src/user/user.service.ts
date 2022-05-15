@@ -43,4 +43,8 @@ export class UserService {
   async getCount() {
     return this.UserModel.find().count().exec();
   }
+
+  async delete(id: string) {
+    return this.UserModel.findByIdAndDelete(id).exec();
+  }
 }
