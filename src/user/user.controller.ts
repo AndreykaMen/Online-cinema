@@ -24,6 +24,12 @@ export class UserController {
     return this.userService.updateProfile(_id, dto);
   }
 
+  @Get("count")
+  @Auth("admin")
+  async getCountUsers() {
+    return this.userService.getCount();
+  }
+
   @UsePipes(new ValidationPipe())
   @Put(":id")
   @HttpCode(200)
