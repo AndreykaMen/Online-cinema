@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { Auth } from "../auth/decorators/auth.decorator";
 import { User } from "./decorators/user.decorator";
@@ -27,8 +27,15 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   @Put(":id")
   @HttpCode(200)
-  @Auth('admin')
+  @Auth("admin")
   async updateUser(@Param("id", IdValidationPipe) id: string, @Body() dto: UpdateUserDto) {
     return this.userService.updateProfile(id, dto);
+  }
+
+  @Delete(":id")
+  @HttpCode(200)
+  @Auth("admin")
+  async deleteUser(@Param("id", IdValidationPipe) id: string) {
+    return this.userService.delete(id);
   }
 }
