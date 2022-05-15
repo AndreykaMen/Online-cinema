@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Put, Query, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { Auth } from "../auth/decorators/auth.decorator";
 import { User } from "./decorators/user.decorator";
@@ -28,6 +28,12 @@ export class UserController {
   @Auth("admin")
   async getCountUsers() {
     return this.userService.getCount();
+  }
+
+  @Get()
+  @Auth("admin")
+  async getUsers(@Query("searchTerm") searchTerm?: string) {
+    return this.userService.getAll(searchTerm);
   }
 
   @UsePipes(new ValidationPipe())
