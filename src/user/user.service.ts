@@ -7,60 +7,65 @@ import { genSalt, hash } from "bcryptjs";
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(UserModel) private readonly UserModel: ModelType<UserModel>) {
-  }
+	constructor(
+		@InjectModel(UserModel) private readonly UserModel: ModelType<UserModel>
+	) {}
 
-  async byId(_id: string) {
-    const user = await this.UserModel.findById(_id);
+	async byId(_id: string) {
+		const user = await this.UserModel.findById(_id);
 
-    if (!user) throw new NotFoundException("User not found");
-    return user;
-    //Либо можно возвращать выбранные поля из user
-    // return {
-    //   email: user.email,
-    //   isAdmin: user.isAdmin,
-    //   favorites: user.favorites,
-    //   createdAt: user.createdAt
-    // }
-  }
+		if (!user) throw new NotFoundException("User not found");
+		return user;
+		//Либо можно возвращать выбранные поля из user
+		// return {
+		//   email: user.email,
+		//   isAdmin: user.isAdmin,
+		//   favorites: user.favorites,
+		//   createdAt: user.createdAt
+		// }
+	}
 
-  async updateProfile(_id: string, dto: UpdateUserDto) {
-    const user = await this.byId(_id);
-    const isSameUser = await this.UserModel.findOne({ email: dto.email });
-    if (isSameUser && String(_id) !== String(isSameUser._id)) throw new NotFoundException("Email busy!");
-    if (dto.password) {
-      const salt = await genSalt(10);
-      user.password = await hash(dto.password, salt);
-    }
-    user.email = dto.email;
-    if (dto.isAdmin || dto.isAdmin === false) {
-      user.isAdmin = dto.isAdmin;
-    }
-    await user.save();
-    return;
-  }
+	async updateProfile(_id: string, dto: UpdateUserDto) {
+		const user = await this.byId(_id);
+		const isSameUser = await this.UserModel.findOne({ email: dto.email });
+		if (isSameUser && String(_id) !== String(isSameUser._id))
+			throw new NotFoundException("Email busy!");
+		if (dto.password) {
+			const salt = await genSalt(10);
+			user.password = await hash(dto.password, salt);
+		}
+		user.email = dto.email;
+		if (dto.isAdmin || dto.isAdmin === false) {
+			user.isAdmin = dto.isAdmin;
+		}
+		await user.save();
+		return;
+	}
 
-  async getCount() {
-    return this.UserModel.find().count().exec();
-  }
+	async getCount() {
+		return this.UserModel.find().count().exec();
+	}
 
-  async getAll(searchTerm: string) {
-    let options = {};
-    if (searchTerm) {
-      options = {
-        $or: [
-          {
-            email: new RegExp(searchTerm, "i")
-          }
-        ]
-      };
-    }
-    return this.UserModel.find(options).select("-password -updateAt -_v").sort({
-      createdAt: "desc"
-    }).exec();
-  }
+	async getAll(searchTerm: string) {
+		let options = {};
+		if (searchTerm) {
+			options = {
+				$or: [
+					{
+						email: new RegExp(searchTerm, "i"),
+					},
+				],
+			};
+		}
+		return this.UserModel.find(options)
+			.select("-password -updatedAt -__v")
+			.sort({
+				createdAt: "desc",
+			})
+			.exec();
+	}
 
-  async delete(id: string) {
-    return this.UserModel.findByIdAndDelete(id).exec();
-  }
+	async delete(id: string) {
+		return this.UserModel.findByIdAndDelete(id).exec();
+	}
 }

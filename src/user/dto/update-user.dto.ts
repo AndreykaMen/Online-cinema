@@ -1,10 +1,10 @@
 import { IsEmail } from "class-validator";
 
 export class UpdateUserDto {
-  @IsEmail()
-  email: string;
+	@IsEmail()
+	email: string;
 
-  password?: string;
+	password?: string;
 
-  isAdmin?: boolean;
+	isAdmin?: boolean;
 }
